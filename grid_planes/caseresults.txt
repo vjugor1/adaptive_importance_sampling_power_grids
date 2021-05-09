@@ -1,0 +1,4 @@
+     Length Class  Mode   
+[1,] 1      -none- numeric
+[2,] 1      -none- numeric
+[3,] 1      -none- numeric
