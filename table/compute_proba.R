@@ -24,8 +24,12 @@ compute_probas <- function(prefix) {
 	#capture.output(summary(out), file = paste(prefix, "results.txt", sep=""))
 }
 get_data_for_table <- function(){
-  data_prefix_list = list('case118ipi2', 'case118ipi3', 'case118ipi4', 'case118ipi6', 'case57pi2', 'case57pi3', 'case57pi4', 'case57pi6')
+  data_prefix_list = list('case118ipi3', 'case118ipi4', 'case118ipi6', 'case118ipi7', 'case118ipi8')
+  
+  data_prefix_list =c(data_prefix_list, list('case57pi3', 'case57pi4', 'case57pi6', 'case57pi7', 'case57pi8'))  #list('case200pi2', 'case200pi3', 'case200pi4', 'case200pi6', 'case200pi7', 'case200pi8')
+  data_prefix_list = c(data_prefix_list, list('case30pi3', 'case30pi4', 'case30pi6', 'case30pi7', 'case30pi8'))
   for(prefix in data_prefix_list){
+    print(prefix)
     get_exp_plot_data(prefix)  
   }
   

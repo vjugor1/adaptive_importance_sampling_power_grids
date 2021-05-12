@@ -89,7 +89,7 @@ def write_exp_stds(grid, name):
     ### 500 is often enough
     ### 10000 is a default value supresses the variance
 
-    nsmp = 500; 
+    nsmp = 1000; 
 
 
     ### Step-sizes for KL and Var minimization 
@@ -400,7 +400,8 @@ def write_exp_stds(grid, name):
     aloe_exp = p_up*np.sum(1./np.sum(x_bn <= smp.T[:],axis=1))/nsmp_ + prb_rmd; 
     aloe_std = p_up*math.sqrt(2*len(_hpl))/math.sqrt(nsmp_); # indeed len(_hpl) instead of 2*m in the Thrm
     aloe_exp_history = [p_up * np.sum(1. / np.sum(x_bn <= (x_An@x_aloe[:i, :].T).T, axis=1)) / (i + 1) + prb_rmd for i in range(0,nsmp_)]
-    aloe_std_history = [p_up*math.sqrt(2*len(_hpl))/math.sqrt(i + 1) for i in range(0, nsmp_)]
+    #aloe_std_history = [p_up*math.sqrt(2*len(_hpl))/math.sqrt(i + 1) for i in range(0, nsmp_)]
+    aloe_std_history = [np.std(aloe_exp_history[:i+1]) for i in range(nsmp)]
 
 
     print("ALOE (exp, std)", (aloe_exp, aloe_std))
@@ -485,9 +486,9 @@ def write_exp_stds(grid, name):
         md_exp = md_exp + wgt;
         md_exp_history.append(p_up * md_exp / (i + 1) + prb_rmd)
         md_var = md_var + p_up*np.dot(grad.T,grad);
-        md_std_history.append(p_up * math.sqrt(md_var) / (i + 1))
+        #md_std_history.append(p_up * math.sqrt(md_var) / (i + 1))
 
-
+    md_std_history = [np.std(md_exp_history[:i+1]) for i in range(nsmp)]
     print("Optimal weigths of MD-Var minimization: ", alph)
     print("Optimal weigths of ALOE", x_alph)
 
@@ -568,8 +569,8 @@ def write_exp_stds(grid, name):
         kl_exp = kl_exp + wgt;
         kl_exp_history.append(p_up * kl_exp / (i + 1) + prb_rmd)
         kl_var = kl_var + p_up*np.dot(grad.T,grad)*wgt;
-        kl_std_history.append(p_up * math.sqrt(kl_var) / (i + 1))
-
+        #kl_std_history.append(p_up * math.sqrt(kl_var) / (i + 1))
+    kl_std_history = [np.std(kl_exp_history[:i+1]) for i in range(nsmp)]
     print("Optimal weigths of MD-KL minimization: ", alph)
     print("Optimal weigths of ALOE", x_alph)
 

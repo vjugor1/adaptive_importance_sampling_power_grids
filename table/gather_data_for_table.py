@@ -67,7 +67,7 @@ def write_planes_gather_data(pi_over, net_name_list):
         ### 10000 is a default value supresses the variance
 
         #nsmp = 10000; 
-        nsmp = 1000; 
+        nsmp = 100; 
 
 
         ### Step-sizes for KL and Var minimization 
@@ -376,8 +376,8 @@ def write_planes_gather_data(pi_over, net_name_list):
         aloe_exp = p_up*np.sum(1./np.sum(x_bn <= smp.T[:],axis=1))/nsmp + prb_rmd; 
         aloe_std = p_up*math.sqrt(2*len(_hpl))/math.sqrt(nsmp); # indeed len(_hpl) instead of 2*m in the Thrm
         aloe_exp_history = [p_up * np.sum(1. / np.sum(x_bn <= (x_An@x_aloe[:i, :].T).T, axis=1)) / (i + 1) + prb_rmd for i in range(0,nsmp)]
-        aloe_std_history = [p_up*math.sqrt(2*len(_hpl))/math.sqrt(i + 1) for i in range(0, nsmp)]
-
+        #aloe_std_history = [p_up*math.sqrt(2*len(_hpl))/math.sqrt(i + 1) for i in range(0, nsmp)]
+        aloe_std_history = [np.std(aloe_exp_history[:i+1]) for i in range(nsmp)]
 
         print("ALOE (exp, std)", (aloe_exp, aloe_std))
         
@@ -534,9 +534,9 @@ def write_planes_gather_data(pi_over, net_name_list):
             md_exp = md_exp + wgt;
             md_exp_history.append(p_up * md_exp / (i + 1) + prb_rmd)
             md_var = md_var + p_up*np.dot(grad.T,grad);
-            md_std_history.append(p_up * math.sqrt(md_var) / (i + 1))
+            #md_std_history.append(p_up * math.sqrt(md_var) / (i + 1))
 
-
+        md_std_history = [np.std(md_exp_history[:i+1]) for i in range(nsmp)]
         print("Optimal weigths of MD-Var minimization: ", alph)
         print("Optimal weigths of ALOE", x_alph)
 
@@ -617,8 +617,9 @@ def write_planes_gather_data(pi_over, net_name_list):
             kl_exp = kl_exp + wgt;
             kl_exp_history.append(p_up * kl_exp / (i + 1) + prb_rmd)
             kl_var = kl_var + p_up*np.dot(grad.T,grad)*wgt;
-            kl_std_history.append(p_up * math.sqrt(kl_var) / (i + 1))
-
+            #kl_std_history.append(p_up * math.sqrt(kl_var) / (i + 1))
+            
+        kl_std_history = [np.std(kl_exp_history[:i+1]) for i in range(nsmp)]
         print("Optimal weigths of MD-KL minimization: ", alph)
         print("Optimal weigths of ALOE", x_alph)
 
@@ -668,7 +669,8 @@ grid6495 = pp.networks.case6495rte(); # multiple stacks
 grid6515 = pp.networks.case6515rte(); #? slack angle != 0
 grid9241 = pp.networks.case9241pegase(); # extremely high probability
 
-net = grid118i
-net_name_list = [(grid57, 'case57'), (grid3120, 'case3120'), (net, 'case118i')]
-for over in [2, 3, 4, 6]:
+net = grid200
+net_name_list = [(grid57, 'case57'), (grid3120, 'case3120'), (net, 'case118i'), (grid200, 'case200'), (grid30, 'case30')]
+#net_name_list = [(grid57, 'case57'), (grid3120, 'case3120'), (net, 'case118i')]
+for over in [3, 4, 6, 7, 8]:
     write_planes_gather_data(over, net_name_list)
