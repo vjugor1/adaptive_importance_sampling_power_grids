@@ -9,3 +9,5 @@ This project implements the algorithm for computation of Gaussian volume of a po
 Use `Samplings' Comparison Grids.ipynb` for experiments with power grids, corresponding folders for particular experiments and data extraction.
 
 The notebook `Samplings' Comparison Polygon.ipynb` can be used for experiments on regular polytope which is a simple test case.
+
+arXiv: https://arxiv.org/abs/2105.08753
